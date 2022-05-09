@@ -7,6 +7,10 @@ namespace ImageQuantization
 {
     internal class Clustering
     {
+        public void Prims_algo()
+        {
 
+
+        }
     }
 }

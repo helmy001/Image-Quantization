@@ -8,10 +8,10 @@ namespace ImageQuantization
 
     public struct edge
     {
-        public int start;
-        public int end;
+        public RGBPixel start;
+        public RGBPixel end;
         public int cost;
-        public edge(int start, int end, int cost)
+        public edge(RGBPixel start, RGBPixel end, int cost)
         {
             this.start = start;
             this.end = end;
@@ -23,7 +23,7 @@ namespace ImageQuantization
     {
        
         private int size;
-        private List<edge> vect=new List<edge>() {new edge(-1,-1,-1)};
+        private List<edge> pq=new List<edge>() {new edge(new RGBPixel(0,0,0), new RGBPixel(0,0,0),-1)};
         
         private int parent(int idx) 
         {
@@ -41,9 +41,9 @@ namespace ImageQuantization
         public void SwapNum(int idx1,int idx2)
         {
 
-            edge temp = vect[idx1];
-            vect[idx1] = vect[idx2];
-            vect[idx2] = temp;
+            edge temp = pq[idx1];
+            pq[idx1] = pq[idx2];
+            pq[idx2] = temp;
         }
 
         public bool isEmpty()
@@ -53,12 +53,12 @@ namespace ImageQuantization
        
         public void insert(edge e)
         {
-            if(size+1 >= vect.Count())
+            if(size+1 >= pq.Count())
             {
-                vect.Add(e);
+                pq.Add(e);
             }
 
-            vect[++size] = e;
+            pq[++size] = e;
             shiftUp(size);
             return;
 
@@ -70,7 +70,7 @@ namespace ImageQuantization
 
             if (idx == 1) return; //Base case
 
-            if (vect[idx].cost < vect[parent(idx)].cost )
+            if (pq[idx].cost < pq[parent(idx)].cost )
             {
                 SwapNum(idx,parent(idx));
                 
@@ -86,11 +86,11 @@ namespace ImageQuantization
            
 
             int swapIdx = idx;
-            if(left(idx) <= size && vect[idx].cost>vect[left(idx)].cost) 
+            if(left(idx) <= size && pq[idx].cost>pq[left(idx)].cost) 
             {
                 swapIdx = left(idx);
             }
-            if (right(idx) <= size && vect[swapIdx].cost > vect[right(idx)].cost)
+            if (right(idx) <= size && pq[swapIdx].cost > pq[right(idx)].cost)
             {
                 swapIdx = right(idx);
             }
@@ -106,10 +106,10 @@ namespace ImageQuantization
          
         public edge GetMin()
         {
-            edge min=new edge(-1,-1,-1);
+            edge min=new edge(new RGBPixel(0,0,0), new RGBPixel(0, 0, 0), -1);
             if (size > 0)
             {
-                min = vect[1];
+                min = pq[1];
                 SwapNum(1, size--);
                 shiftDown(1);
                 return min;
