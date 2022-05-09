@@ -7,5 +7,6 @@ namespace ImageQuantization
 {
     internal class Clustering
     {
+
     }
 }
