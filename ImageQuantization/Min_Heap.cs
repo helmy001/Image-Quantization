@@ -5,11 +5,26 @@ using System.Text;
 
 namespace ImageQuantization
 {
+
+    public struct edge
+    {
+        public int start;
+        public int end;
+        public int cost;
+        public edge(int start, int end, int cost)
+        {
+            this.start = start;
+            this.end = end;
+            this.cost = cost;
+        }
+    }
+
     internal class Min_Heap
     {
+       
         private int size;
-        private List<int> vect=new List<int>() {-1} ;
-
+        private List<edge> vect=new List<edge>() {new edge(-1,-1,-1)};
+        
         private int parent(int idx) 
         {
             return idx>>1; //  = idx/2
@@ -26,7 +41,7 @@ namespace ImageQuantization
         public void SwapNum(int idx1,int idx2)
         {
 
-            int temp = vect[idx1];
+            edge temp = vect[idx1];
             vect[idx1] = vect[idx2];
             vect[idx2] = temp;
         }
@@ -36,14 +51,14 @@ namespace ImageQuantization
             return size == 0;
         }
        
-        public void insert(int val)
+        public void insert(edge e)
         {
             if(size+1 >= vect.Count())
             {
-                vect.Add(0);
+                vect.Add(e);
             }
 
-            vect[++size] = val;
+            vect[++size] = e;
             shiftUp(size);
             return;
 
@@ -55,7 +70,7 @@ namespace ImageQuantization
 
             if (idx == 1) return; //Base case
 
-            if (vect[idx] < vect[parent(idx)] )
+            if (vect[idx].cost < vect[parent(idx)].cost )
             {
                 SwapNum(idx,parent(idx));
                 
@@ -71,11 +86,11 @@ namespace ImageQuantization
            
 
             int swapIdx = idx;
-            if(left(idx) <= size && vect[idx]>vect[left(idx)]) 
+            if(left(idx) <= size && vect[idx].cost>vect[left(idx)].cost) 
             {
                 swapIdx = left(idx);
             }
-            if (right(idx) <= size && vect[swapIdx] > vect[right(idx)])
+            if (right(idx) <= size && vect[swapIdx].cost > vect[right(idx)].cost)
             {
                 swapIdx = right(idx);
             }
@@ -89,16 +104,17 @@ namespace ImageQuantization
 
         }
          
-        public int GetMin()
+        public edge GetMin()
         {
+            edge min=new edge(-1,-1,-1);
             if (size > 0)
             {
-                int min = vect[1];
+                min = vect[1];
                 SwapNum(1, size--);
                 shiftDown(1);
                 return min;
             }
-            return -1;
+            return min ;
         }
 
         
