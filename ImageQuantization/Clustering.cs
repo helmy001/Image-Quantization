@@ -9,16 +9,16 @@ namespace ImageQuantization
     internal class Clustering
     {
 
-        public static List<RGBPixel> Detailed_Color;    //list contains the distict colours
-        public static List<List<double>> Adjmat;       //Adjancency matrix containing all weights of edges
+        public  List<RGBPixel> Detailed_Color;    //list contains the distict colours
+        public  List<List<double>> Adjmat;       //Adjancency matrix containing all weights of edges
 
-        public static void Prims_algo()
+        public  void Prims_algo()
         {
             
         }
 
 
-        public static void Fill_Adjacency_Matrix()
+        public  void Fill_Adjacency_Matrix()
         {
             Adjmat = new List<List<double>>();
             double temp = double.MaxValue;  
@@ -38,7 +38,7 @@ namespace ImageQuantization
                 
             }
         }
-        public static void Properties_Colors(RGBPixel[,] Colored_Image)
+        public  void Properties_Colors(RGBPixel[,] Colored_Image)
         {
             bool[,,] Appeared_Color = new bool[256, 256, 256];
 
@@ -68,18 +68,18 @@ namespace ImageQuantization
                 Height_Count++;
             }
 
-            MessageBox.Show(Detailed_Color.Count.ToString());
+            MessageBox.Show($"Number of distinct colors : {Detailed_Color.Count.ToString()}");
             
             
         }
 
-        public static double Euclidean_Distance(RGBPixel p1,RGBPixel p2)
+        public  double Euclidean_Distance(RGBPixel p1,RGBPixel p2)
         {
             double dist = Math.Sqrt(((p1.red - p2.red) * (p1.red - p2.red)) + ((p1.blue - p2.blue) * (p1.blue - p2.blue)) + ((p1.green - p2.green) * (p1.green - p2.green)));
             return dist;
         }
 
-        public static void Show_Distinct_arr()
+        public  void Show_Distinct_arr()
         {
             for(int i = 0;i < Detailed_Color.Count; i++)
             {

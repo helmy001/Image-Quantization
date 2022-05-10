@@ -16,6 +16,7 @@ namespace ImageQuantization
         }
 
         RGBPixel[,] ImageMatrix;
+        Clustering clustering;
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -27,11 +28,15 @@ namespace ImageQuantization
                 ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
                 ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
 
+                //make  object from Clustering class
+                clustering = new Clustering();
+
                 //Make array of distinct colors
-                Clustering.Properties_Colors(ImageMatrix);
+                clustering.Properties_Colors(ImageMatrix);
 
                 //fill the adjacency matrix with weights
-                Clustering.Fill_Adjacency_Matrix();
+                clustering.Fill_Adjacency_Matrix();
+
 
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
