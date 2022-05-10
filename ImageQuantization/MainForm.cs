@@ -26,9 +26,17 @@ namespace ImageQuantization
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
                 ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
+
+                //Make array of distinct colors
+                Clustering.Properties_Colors(ImageMatrix);
+
+                //fill the adjacency matrix with weights
+                Clustering.Fill_Adjacency_Matrix();
+
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
             txtHeight.Text = ImageOperations.GetHeight(ImageMatrix).ToString();
+
         }
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)

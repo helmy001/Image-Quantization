@@ -2,18 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace ImageQuantization
 {
     internal class Clustering
     {
-        public static List<RGBPixel> Detailed_Color;
 
+        public static List<RGBPixel> Detailed_Color;    //list contains the distict colours
+        public static List<List<double>> Adjmat;       //Adjancency matrix containing all weights of edges
+
+        public static void Prims_algo()
+        {
+            
+        }
+
+
+        public static void Fill_Adjacency_Matrix()
+        {
+            Adjmat = new List<List<double>>();
+            double temp = double.MaxValue;  
+
+            for (int i = 0; i < Detailed_Color.Count; i++)
+            {    
+                Adjmat.Add(new List<double>());
+                for(int j=0; j< Detailed_Color.Count; j++)
+                {
+                    Adjmat[i].Add(temp);
+                    if (i != j)
+                    {
+                        Adjmat[i][j]=Euclidean_Distance(Detailed_Color[i], Detailed_Color[j]);
+                    }
+                   
+                }
+                
+            }
+        }
         public static void Properties_Colors(RGBPixel[,] Colored_Image)
-        public List<RGBPixel> Distinct_arr=new List<RGBPixel>();  //list contains the distict colours
-        public List<List<double>> Adjmat;
-
-        public void Prims_algo()
         {
             bool[,,] Appeared_Color = new bool[256, 256, 256];
 
@@ -36,49 +61,31 @@ namespace ImageQuantization
                         Appeared_Color[Red_Colored, Green_Colored, Blue_Colored] = true;
                         Detailed_Color.Add(Colored_Image[Height_Count, Width_Count]);
                     }
+                    
                     Width_Count++;
                 }
                 Width_Count = 0;
                 Height_Count++;
             }
-        }
-        public int Num_Distinct_Colors()
-        {
 
-            return Distinct_arr.Count; //return the size of distinct colors list
+            MessageBox.Show(Detailed_Color.Count.ToString());
+            
+            
         }
-        public void Fill_Adjacency_Matrix()
-        {
-            Adjmat = new List<List<double>>();
-            double temp = double.MaxValue;  
 
-            for (int i = 0; i < Distinct_arr.Count; i++)
-            {    
-                Adjmat.Add(new List<double>());
-                for(int j=0; j<Distinct_arr.Count; j++)
-                {
-                    Adjmat[i].Add(temp);
-                    if (i != j)
-                    {
-                        Adjmat[i][j]=Euclidean_Distance(Distinct_arr[i], Distinct_arr[j]);
-                    }
-                    
-                }
-
-            }
-        }
-        public double Euclidean_Distance(RGBPixel p1,RGBPixel p2)
+        public static double Euclidean_Distance(RGBPixel p1,RGBPixel p2)
         {
             double dist = Math.Sqrt(((p1.red - p2.red) * (p1.red - p2.red)) + ((p1.blue - p2.blue) * (p1.blue - p2.blue)) + ((p1.green - p2.green) * (p1.green - p2.green)));
             return dist;
         }
 
-        public  void Show_Distinct_arr()
+        public static void Show_Distinct_arr()
         {
-            for(int i = 0;i < Distinct_arr.Count; i++)
+            for(int i = 0;i < Detailed_Color.Count; i++)
             {
-                Console.WriteLine(Distinct_arr[i].red);
+                Console.WriteLine(Detailed_Color[i].red);
             }
         }
+
     }
 }
