@@ -8,10 +8,10 @@ namespace ImageQuantization
 
     public struct edge
     {
-        public RGBPixel start;
-        public RGBPixel end;
-        public int cost;
-        public edge(RGBPixel start, RGBPixel end, int cost)
+        public int start;
+        public int end;
+        public float cost;
+        public edge(int start, int end, float cost)
         {
             this.start = start;
             this.end = end;
@@ -23,7 +23,7 @@ namespace ImageQuantization
     {
        
         private int size;
-        private List<edge> pq=new List<edge>() {new edge(new RGBPixel(0,0,0), new RGBPixel(0,0,0),-1)};
+        private List<edge> pq=new List<edge>() {new edge(-1,-1,-1)};
         
         private int parent(int idx) 
         {
@@ -38,7 +38,7 @@ namespace ImageQuantization
             return (idx << 1 )+1; // = idx *2 +1
         }
 
-        public void SwapNum(int idx1,int idx2)
+        private void SwapNum(int idx1,int idx2)
         {
 
             edge temp = pq[idx1];
@@ -48,7 +48,10 @@ namespace ImageQuantization
 
         public bool isEmpty()
         {
-            return size == 0;
+            if(size==0)
+                return true;
+
+            return false;
         }
        
         public void insert(edge e)
@@ -64,7 +67,7 @@ namespace ImageQuantization
 
 
         }
-        public void shiftUp(int idx)
+        private void shiftUp(int idx)
         {
             if (idx > size) return; // if the idx passed is not valid
 
@@ -79,7 +82,7 @@ namespace ImageQuantization
 
 
         }
-        public void shiftDown(int idx)
+        private void shiftDown(int idx)
         {
 
             if(idx > size) return;
@@ -106,7 +109,7 @@ namespace ImageQuantization
          
         public edge GetMin()
         {
-            edge min=new edge(new RGBPixel(0,0,0), new RGBPixel(0, 0, 0), -1);
+            edge min=new edge(-1,-1, -1);
             if (size > 0)
             {
                 min = pq[1];
@@ -116,9 +119,7 @@ namespace ImageQuantization
             }
             return min ;
         }
-
-        
-
+      
 
 
     }

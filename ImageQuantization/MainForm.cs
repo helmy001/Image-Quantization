@@ -36,6 +36,9 @@ namespace ImageQuantization
 
                 //fill the adjacency matrix with weights
                 clustering.Fill_Adjacency_Matrix();
+                
+                //construct mst
+                clustering.Eager_prims(0);
 
 
             }
