@@ -10,20 +10,20 @@ namespace ImageQuantization
     {
 
         public  List<RGBPixel> Detailed_Color;    //list contains the distict colours
-        public  List<List<float>> Adjmat;       //Adjancency matrix containing all weights of edges
         public List<bool> visited;              //list of visited vertices
         public List<edge> mstEdges;             //mst tree 
-
+        public List<RGBPixel> Palette;
         public Eager_min_Heapcs Ipq;
+        private sorting sort_ob=new sorting();
 
         public void Eager_prims(int s)
         {
-            Ipq = new Eager_min_Heapcs(Detailed_Color.Count);
             int req_num_edges = Detailed_Color.Count - 1;  //number of edges = vertices -1
-            int edge_count = 0;
-            float mst_cost = 0;
+            Ipq = new Eager_min_Heapcs(Detailed_Color.Count);
             mstEdges = new List<edge>(new edge[req_num_edges]);             //initialize empty list for mst 
             visited = new List<bool>(new bool[Detailed_Color.Count]);    //initialize list for visited nodes
+            int edge_count = 0;
+            float mst_cost = 0;
 
             RelaxEdgesAtNode(s);
 
@@ -57,22 +57,18 @@ namespace ImageQuantization
         private void RelaxEdgesAtNode(int nodeIndex)
         {
             visited[nodeIndex] = true;
-            
-            
+
             for (int i = 0; i < Detailed_Color.Count; i++)
             {
-                if (visited[i])
-                {
-                    continue;
-                }
 
-              
-                if (Adjmat[nodeIndex][i] != float.MaxValue)
+                edge e = new edge();
+                e.start = nodeIndex;
+                e.end = i;
+                e.cost = Euclidean_Distance(Detailed_Color[e.start],Detailed_Color[e.end]);
+
+                if (!visited[i])
                 {
-                    edge e = new edge();
-                    e.start = nodeIndex;
-                    e.end = i;
-                    e.cost = Adjmat[nodeIndex][i];
+                    
 
                     if (!Ipq.contains(e.end))
                     {
@@ -89,26 +85,6 @@ namespace ImageQuantization
         }
         
 
-        public  void Fill_Adjacency_Matrix()
-        {
-            Adjmat = new List<List<float>>();
-            float temp = float.MaxValue;  
-
-            for (int i = 0; i < Detailed_Color.Count; i++)
-            {    
-                Adjmat.Add(new List<float>());
-                for(int j=0; j< Detailed_Color.Count; j++)
-                {
-                    Adjmat[i].Add(temp);
-                    if (i != j)
-                    {
-                        Adjmat[i][j]=Euclidean_Distance(Detailed_Color[i], Detailed_Color[j]);
-                    }
-                   
-                }
-                
-            }
-        }
         public  void Properties_Colors(RGBPixel[,] Colored_Image)
         {
             bool[,,] Appeared_Color = new bool[256, 256, 256];
@@ -158,10 +134,35 @@ namespace ImageQuantization
         }
         public void Show_mst_edges()
         {
+            
             foreach(var e in mstEdges)
             {
-                Console.WriteLine(e.start +" "+e.end);
+                Console.WriteLine(e.start +" "+e.end+" "+e.cost);
             }
+        }
+   
+        public void K_Clusters(int k)
+        {
+            mstEdges.Sort(sort_ob.Compare);
+            int size = (mstEdges.Count / k);
+            for(int i = 0;i < k; i++)
+            {
+                int red=0,green=0, blue=0,counter=0;
+                for(int j =size*i; j  < mstEdges.Count/k; j++)
+                {
+
+                    red+=Detailed_Color[mstEdges[j].start].red;
+                    blue += Detailed_Color[mstEdges[j].start].blue;
+                    green+= Detailed_Color[mstEdges[j].start].green;
+                    counter++;
+                }
+                red /= counter;
+                green /= counter;
+                blue /= counter;
+                Palette.Add(new RGBPixel((byte)red, (byte)green, (byte)blue));
+            }
+
+
         }
 
         /*  public void Lazy_prims(int s)

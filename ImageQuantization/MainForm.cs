@@ -34,9 +34,6 @@ namespace ImageQuantization
                 //Make array of distinct colors
                 clustering.Properties_Colors(ImageMatrix);
 
-                //fill the adjacency matrix with weights
-                clustering.Fill_Adjacency_Matrix();
-                
                 //construct mst
                 clustering.Eager_prims(0);
 
@@ -55,7 +52,9 @@ namespace ImageQuantization
             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
         }
 
-       
-       
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
