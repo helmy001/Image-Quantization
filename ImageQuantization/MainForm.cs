@@ -34,27 +34,45 @@ namespace ImageQuantization
                 //Make array of distinct colors
                 clustering.Properties_Colors(ImageMatrix);
 
-                //construct mst
-                clustering.Eager_prims(0);
-
-
+                
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
             txtHeight.Text = ImageOperations.GetHeight(ImageMatrix).ToString();
 
         }
 
-        private void btnGaussSmooth_Click(object sender, EventArgs e)
+       /* private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             double sigma = double.Parse(txtGaussSigma.Text);
             int maskSize = (int)nudMaskSize.Value ;
             ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
-        }
+        }*/
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            comboBox1.Items.Add("Lazy Prim's ");
+            comboBox1.Items.Add("Eager Prim's");
+        }
 
+        
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (txtWidth.TextLength != 0)
+            {
+                if (comboBox1.SelectedIndex == 0)
+                {
+                    clustering.Lazy_prims(0);
+                }
+                else if (comboBox1.SelectedIndex == 1)
+                {
+                    clustering.Eager_prims(0);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Open Image First !");
+            }
         }
     }
 }

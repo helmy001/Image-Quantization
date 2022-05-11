@@ -15,6 +15,7 @@ namespace ImageQuantization
         public List<RGBPixel> Palette;
         public Eager_min_Heapcs Ipq;
         private sorting sort_ob=new sorting();
+        private Min_Heap pq;
 
         public void Eager_prims(int s)
         {
@@ -22,6 +23,7 @@ namespace ImageQuantization
             Ipq = new Eager_min_Heapcs(Detailed_Color.Count);
             mstEdges = new List<edge>(new edge[req_num_edges]);             //initialize empty list for mst 
             visited = new List<bool>(new bool[Detailed_Color.Count]);    //initialize list for visited nodes
+
             int edge_count = 0;
             float mst_cost = 0;
 
@@ -84,7 +86,6 @@ namespace ImageQuantization
             }
         }
         
-
         public  void Properties_Colors(RGBPixel[,] Colored_Image)
         {
             bool[,,] Appeared_Color = new bool[256, 256, 256];
@@ -165,7 +166,7 @@ namespace ImageQuantization
 
         }
 
-        /*  public void Lazy_prims(int s)
+        public void Lazy_prims(int s)
         {
             pq = new Min_Heap();
             int req_num_edges = Detailed_Color.Count - 1;  //number of edges = vertices -1
@@ -202,23 +203,24 @@ namespace ImageQuantization
                 MessageBox.Show(mst_cost.ToString());
             }
         }
+
         private void Add_Edge_to_pq(int nodeIndex)
         {
             visited[nodeIndex]=true;
 
             for(int i = 0; i < Detailed_Color.Count; i++)
             {
-                if(Adjmat[nodeIndex][i]!=float.MaxValue && visited[i] == false)
+                if(visited[i] == false)
                 {
                     edge e = new edge();
                     e.start = nodeIndex;
                     e.end = i;
-                    e.cost = Adjmat[nodeIndex][i];
+                    e.cost = Euclidean_Distance(Detailed_Color[e.start], Detailed_Color[e.end]);
                     pq.insert(e);
                 }
             }
 
-        }*/
+        }
 
     }
 }
