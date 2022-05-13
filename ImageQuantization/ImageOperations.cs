@@ -27,7 +27,16 @@ namespace ImageQuantization
     {
         public double red, green, blue;
     }
-    
+    public struct RGBLong
+    {
+        public long red,green, blue;
+        public RGBLong(long red, long green, long blue)
+        {
+            this.red=red;
+            this.green=green;
+            this.blue=blue;
+        }
+    }
   
     /// <summary>
     /// Library of static functions that deal with images

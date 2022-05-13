@@ -6,7 +6,6 @@ using System.Text;
 namespace ImageQuantization
 {
     
-    
 
     internal class Eager_min_Heapcs
     {
@@ -35,6 +34,7 @@ namespace ImageQuantization
         {
             return (idx << 1) + 1; // = idx *2 +1
         }
+
         private void SwapNum(int idx1, int idx2)
         {
 
