@@ -32,7 +32,7 @@ namespace ImageQuantization
                 clustering = new Clustering();
 
                 //Make array of distinct colors
-                clustering.Properties_Colors(ImageMatrix);
+                dis_colors.Text=clustering.Properties_Colors(ImageMatrix).ToString();
 
                 
 
@@ -83,8 +83,5 @@ namespace ImageQuantization
                 MessageBox.Show("Open Image First !");
             }
         }
-
-
-
     }
 }

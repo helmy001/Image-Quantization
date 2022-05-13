@@ -45,6 +45,8 @@ namespace ImageQuantization
             this.button1 = new System.Windows.Forms.Button();
             this.mst_txt_box = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.dis_colors = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -180,7 +182,7 @@ namespace ImageQuantization
             // 
             // K_txt_box
             // 
-            this.K_txt_box.Location = new System.Drawing.Point(1002, 524);
+            this.K_txt_box.Location = new System.Drawing.Point(1072, 488);
             this.K_txt_box.Name = "K_txt_box";
             this.K_txt_box.Size = new System.Drawing.Size(79, 22);
             this.K_txt_box.TabIndex = 18;
@@ -189,7 +191,7 @@ namespace ImageQuantization
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(961, 524);
+            this.label3.Location = new System.Drawing.Point(1031, 488);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 22);
             this.label3.TabIndex = 19;
@@ -198,7 +200,7 @@ namespace ImageQuantization
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(1002, 572);
+            this.button1.Location = new System.Drawing.Point(1030, 521);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(121, 29);
             this.button1.TabIndex = 20;
@@ -209,26 +211,48 @@ namespace ImageQuantization
             // mst_txt_box
             // 
             this.mst_txt_box.AutoSize = true;
-            this.mst_txt_box.Location = new System.Drawing.Point(845, 575);
+            this.mst_txt_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mst_txt_box.Location = new System.Drawing.Point(1072, 576);
             this.mst_txt_box.Name = "mst_txt_box";
-            this.mst_txt_box.Size = new System.Drawing.Size(0, 16);
+            this.mst_txt_box.Size = new System.Drawing.Size(0, 18);
             this.mst_txt_box.TabIndex = 21;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(742, 572);
+            this.label7.Location = new System.Drawing.Point(969, 572);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(97, 20);
             this.label7.TabIndex = 22;
             this.label7.Text = "Mst Cost :";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(681, 572);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(148, 20);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Distinct Colors :";
+            // 
+            // dis_colors
+            // 
+            this.dis_colors.AutoSize = true;
+            this.dis_colors.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dis_colors.Location = new System.Drawing.Point(835, 574);
+            this.dis_colors.Name = "dis_colors";
+            this.dis_colors.Size = new System.Drawing.Size(0, 18);
+            this.dis_colors.TabIndex = 24;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1205, 615);
+            this.Controls.Add(this.dis_colors);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.mst_txt_box);
             this.Controls.Add(this.button1);
@@ -276,6 +300,8 @@ namespace ImageQuantization
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label mst_txt_box;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label dis_colors;
     }
 }
 

@@ -24,7 +24,7 @@ namespace ImageQuantization
         private max_Heap max_cost;                  //Max Prority Queue
         public  Dictionary<int,bool> not_visited;
         //public Dictionary<RGBPixel, RGBPixel> colors_mapping;
-        public List<RGBPixel> colors_mapping;
+        public RGBPixel []colors_mapping;
         int nodes_count = 0;
         RGBLong rgb=new RGBLong(0,0,0);
 
@@ -33,7 +33,7 @@ namespace ImageQuantization
 
 
         ////// Distinct Colours //////////////////////////////
-        public void Properties_Colors(RGBPixel[,] Colored_Image)
+        public int Properties_Colors(RGBPixel[,] Colored_Image)
         {
             bool[,,] Appeared_Color = new bool[256, 256, 256];
 
@@ -63,7 +63,7 @@ namespace ImageQuantization
                 Height_Count++;
             }
 
-            MessageBox.Show($"Number of distinct colors : {Detailed_Color.Count.ToString()}");
+            return Detailed_Color.Count;
             
             
         }
@@ -80,11 +80,11 @@ namespace ImageQuantization
         {
             not_visited = new Dictionary<int, bool>();
             //colors_mapping = new Dictionary<RGBPixel, RGBPixel>();
-            colors_mapping=new List<RGBPixel>(new RGBPixel[255255255]);
+            colors_mapping=new RGBPixel[255255255];
             Added_In_Cluster = new List<bool>(new bool[Detailed_Color.Count]);
             Palette = new List<RGBPixel>();
             int number_of_cuts = k - 1;
-            while (number_of_cuts > 0)
+            while (number_of_cuts > 0 && k<Detailed_Color.Count)
             {
                 edge e = max_cost.GetMax();
                 if (not_visited.ContainsKey(e.start) == false)
