@@ -51,10 +51,6 @@ namespace ImageQuantization
         }
 
         
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-           
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -67,7 +63,8 @@ namespace ImageQuantization
                 else if (comboBox1.SelectedIndex == 1)
                 {
                     //apply Eager Prims algorithm 
-                    clustering.Eager_prims(0);
+                    float mst_cost=clustering.Eager_prims(0);
+                    mst_txt_box.Text= mst_cost.ToString();
 
                     //K clustering
                     if (K_txt_box.Text.Length == 0)
@@ -75,9 +72,10 @@ namespace ImageQuantization
                     else
                         clustering.K_Clusters(Int16.Parse(K_txt_box.Text.ToString()));
 
-                    //show outpute Colours After Clustering
-                    clustering.show_palette();
 
+                    //Replace the old colors with the new colors and display it
+                      ImageOperations.DisplayImage(clustering.Quantization(ImageMatrix),pictureBox2);
+                   
                 }
             }
             else
@@ -88,13 +86,5 @@ namespace ImageQuantization
 
 
 
-
-        /* private void btnGaussSmooth_Click(object sender, EventArgs e)
-         {
-             double sigma = double.Parse(txtGaussSigma.Text);
-             int maskSize = (int)nudMaskSize.Value ;
-             ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
-             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
-         }*/
     }
 }

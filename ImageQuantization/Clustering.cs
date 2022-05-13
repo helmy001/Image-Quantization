@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace ImageQuantization
 {
@@ -20,7 +22,9 @@ namespace ImageQuantization
         public Eager_min_Heap Ipq;                   //Eager min Prority queue
         private Min_Heap pq;                        //Min Prority Queue
         private max_Heap max_cost;                  //Max Prority Queue
-        public  Dictionary<int,bool> not_visited;   
+        public  Dictionary<int,bool> not_visited;
+        //public Dictionary<RGBPixel, RGBPixel> colors_mapping;
+        public List<RGBPixel> colors_mapping;
         int nodes_count = 0;
         RGBLong rgb=new RGBLong(0,0,0);
 
@@ -35,8 +39,8 @@ namespace ImageQuantization
 
             Detailed_Color = new List<RGBPixel>();
 
-            int Image_Height = ImageOperations.GetHeight(Colored_Image);
-            int Image_Width = ImageOperations.GetWidth(Colored_Image);
+            int Image_Height =Colored_Image.GetLength(0);
+            int Image_Width = Colored_Image.GetLength(1);
             int Height_Count = 0;
             int Width_Count = 0;
 
@@ -50,7 +54,7 @@ namespace ImageQuantization
                     if (Appeared_Color[Red_Colored, Green_Colored, Blue_Colored] == false)
                     {
                         Appeared_Color[Red_Colored, Green_Colored, Blue_Colored] = true;
-                        Detailed_Color.Add(Colored_Image[Height_Count, Width_Count]);
+                        Detailed_Color.Add(new RGBPixel(Red_Colored,Green_Colored,Blue_Colored));
                     }
                     
                     Width_Count++;
@@ -75,6 +79,8 @@ namespace ImageQuantization
         public void K_Clusters(int k)
         {
             not_visited = new Dictionary<int, bool>();
+            //colors_mapping = new Dictionary<RGBPixel, RGBPixel>();
+            colors_mapping=new List<RGBPixel>(new RGBPixel[255255255]);
             Added_In_Cluster = new List<bool>(new bool[Detailed_Color.Count]);
             Palette = new List<RGBPixel>();
             int number_of_cuts = k - 1;
@@ -90,9 +96,7 @@ namespace ImageQuantization
                 number_of_cuts--;
             }
 
- 
-      
-         
+            List<int> vertices;
             for(int i=0; i<mstEdges.Count;i++)
             {
                 rgb.red = 0;
@@ -101,40 +105,42 @@ namespace ImageQuantization
                 nodes_count = 0;
                 if (Added_In_Cluster[i] == false)
                 {
-                    Next_node(i);
+                    vertices = new List<int>();
+                    Next_node(i,vertices);
                     RGBPixel color = new RGBPixel((byte)(rgb.red / nodes_count), (byte)(rgb.green / nodes_count), (byte)(rgb.blue / nodes_count));
                     Palette.Add(color);
+                    mapping_k_colors(vertices, color);
                 }
             }
                 
 
         }
-        public void Next_node(int node)
+        public void Next_node(int node,List <int > vs)
         {
             nodes_count++;
             Added_In_Cluster[node]=true;
             rgb.red += Detailed_Color[node].red;
             rgb.green += Detailed_Color[node].green;
             rgb.blue += Detailed_Color[node].blue;
-           
+            vs.Add(node);
 
             for(int i=0;i<mstEdges[node].Count;i++)
             {
                 if (Added_In_Cluster[mstEdges[node][i]] == false)
                 {
-                    Next_node(mstEdges[node][i]);
+                    Next_node(mstEdges[node][i],vs);
                 }
             }
             return;
         }
-        public void show_palette()
+        public void mapping_k_colors(List<int> vs,RGBPixel color)
         {
-            MessageBox.Show("number of colors in the Palette :" +Palette.Count);
-
-            
-            foreach(var p in Palette)
+            foreach(int i in vs)
             {
-                Console.WriteLine(p.red+" "+p.green+" "+p.blue);
+
+                Int32 index = (Detailed_Color[i].red << 16) + (Detailed_Color[i].green <<8) + (Detailed_Color[i].blue);
+                colors_mapping[index] = color;
+ 
             }
         }
 
@@ -145,11 +151,11 @@ namespace ImageQuantization
 
 
         ////////////////////Eager Prims  /////////////////////////
-        public void Eager_prims(int s)
+        public float Eager_prims(int s)
         {
-            int req_num_edges = Detailed_Color.Count - 1;  //number of edges = vertices -1
+            int req_num_edges = Detailed_Color.Count - 1;                //number of edges = vertices -1
             Ipq = new Eager_min_Heap(Detailed_Color.Count);
-            mstEdges = new List<List<int >>();             //initialize empty list for mst 
+            mstEdges = new List<List<int >>();                          //initialize empty list for mst 
             visited = new List<bool>(new bool[Detailed_Color.Count]);    //initialize list for visited nodes
             max_cost = new max_Heap();
 
@@ -187,8 +193,9 @@ namespace ImageQuantization
             else
             {
                 Console.WriteLine("Eager Prims passed");
-                MessageBox.Show(mst_cost.ToString());
+                return mst_cost;
             }
+            return 0;
         }
 
         private void RelaxEdgesAtNode(int nodeIndex)
@@ -207,7 +214,7 @@ namespace ImageQuantization
                 {
                     
 
-                    if (!Ipq.contains(e.end))
+                    if (Ipq.inverse_map[e.end]==0)
                     {
                         Ipq.insert(e.end,e);
                     }
@@ -227,7 +234,7 @@ namespace ImageQuantization
 
 
         /**************** Lazy Prims Implementation ********/
-        public void Lazy_prims(int s)
+        public float Lazy_prims(int s)
         {
             pq = new Min_Heap();
             int req_num_edges = Detailed_Color.Count - 1;  //number of edges = vertices -1
@@ -266,8 +273,9 @@ namespace ImageQuantization
             else
             {
                 Console.WriteLine("Lazy Prims passed");
-                MessageBox.Show(mst_cost.ToString());
+                return mst_cost;
             }
+            return 0;
         }                     
 
         private void Add_Edge_to_pq(int nodeIndex)
@@ -290,7 +298,26 @@ namespace ImageQuantization
         /**************************************************/
 
 
+        public RGBPixel[,] Quantization(RGBPixel[,] Org_Image)
+        {
+            Console.WriteLine("Replacing img pixels begin");
+            int Image_Height = Org_Image.GetLength(0);
+            int Image_Width = Org_Image.GetLength (1);
+            
+            for (int i = 0; i < Image_Height; i++)
+            {
+                for (int j = 0; j < Image_Width; j++)
+                {
+                    Int32 index = (Org_Image[i,j].red << 16) + (Org_Image[i, j].green << 8) + (Org_Image[i, j].blue);
+                    RGBPixel value=colors_mapping[index];
+                    Org_Image[i,j]=value;
 
+
+                }
+            }
+            Console.WriteLine("Replacing Ends");
+            return Org_Image;
+        }
 
 
         public  float Euclidean_Distance(RGBPixel p1,RGBPixel p2)
