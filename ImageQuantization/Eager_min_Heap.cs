@@ -7,7 +7,7 @@ namespace ImageQuantization
 {
     
 
-    internal class Eager_min_Heapcs
+    internal class Eager_min_Heap
     {
 
         public Dictionary<int, edge> pq;
@@ -15,7 +15,7 @@ namespace ImageQuantization
         public List<int> inverse_map;       //contains index in the mst at any key         
         private int size=0;
 
-        public Eager_min_Heapcs(int num_vert)
+        public Eager_min_Heap(int num_vert)
         {
             pq= new Dictionary<int, edge>();
             pos_map = new List<int>(new int[num_vert+1]);
