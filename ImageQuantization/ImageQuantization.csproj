@@ -54,7 +54,6 @@
     </Compile>
     <Compile Include="ImageOperations.cs" />
     <Compile Include="max_Heap.cs" />
-    <Compile Include="Min_Heap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">

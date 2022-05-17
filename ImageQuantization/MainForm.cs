@@ -16,7 +16,7 @@ namespace ImageQuantization
         }
 
         RGBPixel[,] ImageMatrix;
-        Clustering clustering;
+        
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -27,15 +27,6 @@ namespace ImageQuantization
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
                 ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
-
-                //make  object from Clustering class
-                clustering = new Clustering();
-
-                //Make array of distinct colors
-                dis_colors.Text=clustering.Properties_Colors(ImageMatrix).ToString();
-
-                
-
                 
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
@@ -46,25 +37,30 @@ namespace ImageQuantization
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            comboBox1.Items.Add("Lazy Prim's ");
             comboBox1.Items.Add("Eager Prim's");
         }
 
-        
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
+
+            //make  object from Clustering class
+            Clustering clustering = new Clustering();
+
+            //Make array of distinct colors
+            dis_colors.Text = clustering.Properties_Colors(ImageMatrix).ToString();
+            
             if (txtWidth.TextLength != 0)
             {
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    clustering.Lazy_prims(0);
-                }
-                else if (comboBox1.SelectedIndex == 1)
-                {
+
                     //apply Eager Prims algorithm 
-                    float mst_cost=clustering.Eager_prims(0);
-                    mst_txt_box.Text= mst_cost.ToString();
+                    float mst_cost = clustering.Eager_prims(0);
+                    mst_txt_box.Text = mst_cost.ToString();
 
                     //K clustering
                     if (K_txt_box.Text.Length == 0)
@@ -74,8 +70,10 @@ namespace ImageQuantization
 
 
                     //Replace the old colors with the new colors and display it
-                      ImageOperations.DisplayImage(clustering.Quantization(ImageMatrix),pictureBox2);
-                   
+                    ImageOperations.DisplayImage(clustering.Quantization(ImageMatrix), pictureBox2);
+
+                    watch.Stop();
+                    Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms  , {watch.ElapsedMilliseconds/1000} sec");
                 }
             }
             else

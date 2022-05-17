@@ -212,7 +212,8 @@ namespace ImageQuantization
             // 
             this.mst_txt_box.AutoSize = true;
             this.mst_txt_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mst_txt_box.Location = new System.Drawing.Point(1072, 576);
+            this.mst_txt_box.ForeColor = System.Drawing.Color.Red;
+            this.mst_txt_box.Location = new System.Drawing.Point(1072, 573);
             this.mst_txt_box.Name = "mst_txt_box";
             this.mst_txt_box.Size = new System.Drawing.Size(0, 18);
             this.mst_txt_box.TabIndex = 21;
@@ -241,6 +242,7 @@ namespace ImageQuantization
             // 
             this.dis_colors.AutoSize = true;
             this.dis_colors.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dis_colors.ForeColor = System.Drawing.Color.Red;
             this.dis_colors.Location = new System.Drawing.Point(835, 574);
             this.dis_colors.Name = "dis_colors";
             this.dis_colors.Size = new System.Drawing.Size(0, 18);
