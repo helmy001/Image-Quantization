@@ -47,6 +47,8 @@ namespace ImageQuantization
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.dis_colors = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.time_lbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -100,12 +102,12 @@ namespace ImageQuantization
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(742, 484);
+            this.label2.Location = new System.Drawing.Point(667, 482);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(184, 24);
+            this.label2.Size = new System.Drawing.Size(211, 24);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Smoothed Image";
+            this.label2.Text = "Image Quantization";
             // 
             // txtHeight
             // 
@@ -175,14 +177,14 @@ namespace ImageQuantization
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(746, 526);
+            this.comboBox1.Location = new System.Drawing.Point(671, 523);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 24);
             this.comboBox1.TabIndex = 17;
             // 
             // K_txt_box
             // 
-            this.K_txt_box.Location = new System.Drawing.Point(1072, 488);
+            this.K_txt_box.Location = new System.Drawing.Point(1017, 486);
             this.K_txt_box.Name = "K_txt_box";
             this.K_txt_box.Size = new System.Drawing.Size(79, 22);
             this.K_txt_box.TabIndex = 18;
@@ -191,7 +193,7 @@ namespace ImageQuantization
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(1031, 488);
+            this.label3.Location = new System.Drawing.Point(976, 486);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 22);
             this.label3.TabIndex = 19;
@@ -200,7 +202,7 @@ namespace ImageQuantization
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(1030, 521);
+            this.button1.Location = new System.Drawing.Point(975, 519);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(121, 29);
             this.button1.TabIndex = 20;
@@ -232,7 +234,7 @@ namespace ImageQuantization
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(681, 572);
+            this.label4.Location = new System.Drawing.Point(657, 571);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(148, 20);
             this.label4.TabIndex = 23;
@@ -243,16 +245,38 @@ namespace ImageQuantization
             this.dis_colors.AutoSize = true;
             this.dis_colors.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dis_colors.ForeColor = System.Drawing.Color.Red;
-            this.dis_colors.Location = new System.Drawing.Point(835, 574);
+            this.dis_colors.Location = new System.Drawing.Point(821, 573);
             this.dis_colors.Name = "dis_colors";
             this.dis_colors.Size = new System.Drawing.Size(0, 18);
             this.dis_colors.TabIndex = 24;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(1122, 523);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(66, 22);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "Time :";
+            // 
+            // time_lbl
+            // 
+            this.time_lbl.AutoSize = true;
+            this.time_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.time_lbl.ForeColor = System.Drawing.Color.Red;
+            this.time_lbl.Location = new System.Drawing.Point(1194, 523);
+            this.time_lbl.Name = "time_lbl";
+            this.time_lbl.Size = new System.Drawing.Size(0, 20);
+            this.time_lbl.TabIndex = 26;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1205, 615);
+            this.ClientSize = new System.Drawing.Size(1301, 615);
+            this.Controls.Add(this.time_lbl);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.dis_colors);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label7);
@@ -304,6 +328,8 @@ namespace ImageQuantization
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label dis_colors;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label time_lbl;
     }
 }
 

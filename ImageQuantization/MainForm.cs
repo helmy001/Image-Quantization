@@ -73,6 +73,7 @@ namespace ImageQuantization
                     ImageOperations.DisplayImage(clustering.Quantization(ImageMatrix), pictureBox2);
 
                     watch.Stop();
+                    time_lbl.Text = (watch.ElapsedMilliseconds / 1000).ToString()+" sec";
                     Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms  , {watch.ElapsedMilliseconds/1000} sec");
                 }
             }
@@ -80,6 +81,7 @@ namespace ImageQuantization
             {
                 MessageBox.Show("Open Image First !");
             }
+            return;
         }
     }
 }
