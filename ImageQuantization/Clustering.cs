@@ -17,14 +17,13 @@ namespace ImageQuantization
         public  List<RGBPixel> Detailed_Color;           //list contains the distict colours
         public List<bool> visited;                      //list of visited vertices
         public List<bool> Added_In_Cluster;    
-        public List< List<int> > mstEdges;             // Mst Adjacency List 
+        public List< List<int> > Mst;                 // Mst Adjacency List 
         public List<RGBPixel> Palette;                //list of new colours
-        public Eager_min_Heap Ipq;                   //Eager min Prority queue
+        public Eager_min_Heap Ipq;                   //Eager min Indexed Prority queue
         private max_Heap max_cost;                  //Max Prority Queue
-        public  Dictionary<int,bool> not_visited;
         RGBPixel[,,] colors_mapping;
-        int nodes_count = 0;
         RGBLong rgb=new RGBLong(0,0,0);
+        int nodes_count = 0;
 
 
 
@@ -71,56 +70,55 @@ namespace ImageQuantization
         /********************K Clusters **********************/
         public void K_Clusters(int k)
         {
-            not_visited = new Dictionary<int, bool>();
+
             colors_mapping= new RGBPixel[256, 256, 256];
             Added_In_Cluster = new List<bool>(new bool[Detailed_Color.Count]);
             Palette = new List<RGBPixel>();
             int number_of_cuts = k - 1;
-            while (number_of_cuts > 0 && k<Detailed_Color.Count)
+
+            while (number_of_cuts > 0 && k<Detailed_Color.Count)                //O(K-1)
             {
-                edge e = max_cost.GetMax();
-                if (not_visited.ContainsKey(e.start) == false)
-                    not_visited.Add(e.start, false);
-                if (not_visited.ContainsKey(e.end) == false)
-                    not_visited.Add(e.end, false);
-                mstEdges[e.end].Remove(e.start);
-                mstEdges[e.start].Remove(e.end);
-                number_of_cuts--;
+                edge e = max_cost.GetMax();                                     //O(1)
+                Mst[e.end].Remove(e.start);                                     //O(1)
+                Mst[e.start].Remove(e.end);                                     //O(1)
+                number_of_cuts--;                                               //O(1)
             }
 
             List<int> vertices;
-            for(int i=0; i<mstEdges.Count;i++)
+            for(int i=0; i<Mst.Count;i++)                                       //O(D)    
             {
                 rgb.red = 0;
                 rgb.green = 0;
                 rgb.blue = 0;
                 nodes_count = 0;
-                if (Added_In_Cluster[i] == false)
+                if (Added_In_Cluster[i] == false)                               //O(1)                          
                 {
-                    vertices = new List<int>();
-                    Next_node(i,vertices);
+                    vertices = new List<int>();                                 //O(1)
+                    Next_node(i,vertices);                                      
+
                     RGBPixel color = new RGBPixel((byte)(rgb.red / nodes_count), (byte)(rgb.green / nodes_count), (byte)(rgb.blue / nodes_count));
-                    Palette.Add(color);
-                    mapping_k_colors(vertices, color);
+
+                    Palette.Add(color);                                         //O(1)                                                                                     
+                    mapping_k_colors(vertices, color);                             
                 }
             }
                 
-
+            
         }
         public void Next_node(int node,List <int > vs)
         {
-            nodes_count++;
-            Added_In_Cluster[node]=true;
-            rgb.red += Detailed_Color[node].red;
-            rgb.green += Detailed_Color[node].green;
-            rgb.blue += Detailed_Color[node].blue;
-            vs.Add(node);
+            nodes_count++;                                                      //O(1)
+            Added_In_Cluster[node]=true;                                        //O(1)
+            rgb.red += Detailed_Color[node].red;                                //O(1)        
+            rgb.green += Detailed_Color[node].green;                            //O(1)
+            rgb.blue += Detailed_Color[node].blue;                              //O(1)
+            vs.Add(node);                                                       //O(1)
 
-            for(int i=0;i<mstEdges[node].Count;i++)
+            for (int i=0;i<Mst[node].Count;i++)                                 //O(D)
             {
-                if (Added_In_Cluster[mstEdges[node][i]] == false)
+                if (Added_In_Cluster[Mst[node][i]] == false)                    //O(1)
                 {
-                    Next_node(mstEdges[node][i],vs);
+                    Next_node(Mst[node][i],vs);
                 }
             }
             return;
@@ -142,40 +140,42 @@ namespace ImageQuantization
         ////////////////////Eager Prims  /////////////////////////
         public float Eager_prims(int s)
         {
-            int req_num_edges = Detailed_Color.Count - 1;                //number of edges = vertices -1
-            Ipq = new Eager_min_Heap(Detailed_Color.Count);
-            mstEdges = new List<List<int >>();                          //initialize empty list for mst 
-            visited = new List<bool>(new bool[Detailed_Color.Count]);    //initialize list for visited nodes
-            max_cost = new max_Heap();
-
-            for(int i=0;i<Detailed_Color.Count;i++)                     // O(D) 
-                mstEdges.Add(new List<int>());
-
-            int edge_count = 0;
+            int req_num_edges = Detailed_Color.Count - 1;                 //number of edges = vertices -1
+            Ipq = new Eager_min_Heap(Detailed_Color.Count);               //initialize Indxed Priority Queue
+            Mst = new List<List<int >>();                            //initialize empty list for mst 
+            visited = new List<bool>(new bool[Detailed_Color.Count]);     //initialize list for visited nodes
+            max_cost = new max_Heap();                                    //initialize max Priority Queue for Clustering
+            int edge_counter = 0;
             float mst_cost = 0;
 
-            RelaxEdgesAtNode(s);                                    // O(DLog(V))
 
-            while (!Ipq.isEmpty() && edge_count != req_num_edges)   // O(E+DLog(V))
+            for(int i=0;i<Detailed_Color.Count;i++)                      // O(D) 
+                Mst.Add(new List<int>());
+
+
+            Add_Edges(s);                                        // O(DLog(V))
+
+
+            while (!Ipq.isEmpty() && edge_counter != req_num_edges)     // O(E+DLog(V))
             {
                 edge e = Ipq.GetMin();
                 int NodeIndex = e.end;
 
-                if (visited[NodeIndex])
+                if (visited[NodeIndex])                                   //O(1)
                 {
                     continue;
-                }                  //O(1)
+                }                                      
 
-                mstEdges[e.start].Add(e.end);               // O(1)
-                mstEdges[e.end].Add(e.start);               // O(1)
-                edge_count++;       
-                max_cost.insert(e);                         //O(Log(V))
-                mst_cost += e.cost;                         //O(1)
+                Mst[e.start].Add(e.end);                             // O(1)
+                Mst[e.end].Add(e.start);                             // O(1)
+                edge_counter++;                                            
+                max_cost.insert(e);                                 //O(Log(V))
+                mst_cost += e.cost;                                //O(1)
 
-                RelaxEdgesAtNode(NodeIndex);                //O(DLog(V))
+                Add_Edges(NodeIndex);                            //O(DLog(V))
             }
 
-            if (edge_count != req_num_edges)
+            if (edge_counter != req_num_edges)
             {
                 Console.WriteLine("number of edges in mst not sufficint");
             }
@@ -187,7 +187,7 @@ namespace ImageQuantization
             return 0;
         }
 
-        private void RelaxEdgesAtNode(int nodeIndex)
+        private void Add_Edges(int nodeIndex)
         {
             visited[nodeIndex] = true;                                    //O(1)  
 
@@ -217,12 +217,12 @@ namespace ImageQuantization
             }
         }
 
+
         /////////////////////////////////////////////////////////
 
 
         public RGBPixel[,] Quantization(RGBPixel[,] Org_Image)
         {
-            Console.WriteLine("Replacing img pixels begin");
             int Image_Height = Org_Image.GetLength(0);
             int Image_Width = Org_Image.GetLength (1);
             
@@ -233,7 +233,6 @@ namespace ImageQuantization
                     Org_Image[i,j]= colors_mapping[Org_Image[i,j].red, Org_Image[i, j].green, Org_Image[i, j].blue];
                 }
             }
-            Console.WriteLine("Replacing Ends");
             return Org_Image;
         }
 

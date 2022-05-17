@@ -48,7 +48,7 @@ namespace ImageQuantization
             watch.Start();
 
             //make  object from Clustering class
-            Clustering clustering = new Clustering();
+            Clustering clustering=new Clustering();
 
             //Make array of distinct colors
             dis_colors.Text = clustering.Properties_Colors(ImageMatrix).ToString();
